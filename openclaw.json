@@ -1,0 +1,169 @@
+{
+  "$schema": "https://openclaw.dev/schema/openclaw.json",
+  "version": "1.0",
+  "project": "ShrimPilot-SoloFounder-CoPilot",
+  "description": "守虾人 — 一人创业者的 AI 联合创始人（运营+健康+安全三合一）",
+
+  "agents": {
+    "ops-shrimp": {
+      "workspace": "workspace-ops",
+      "model": "claude-sonnet-4-6",
+      "description": "运营虾 OpsShrimp — 多平台内容生成、自动发布、数据日报、竞品监控",
+      "tools": ["browser", "shell", "file", "oz"],
+      "autostart": false
+    },
+    "care-shrimp": {
+      "workspace": "workspace-care",
+      "model": "claude-sonnet-4-6",
+      "description": "健康虾 CareShrimp — 工作时长追踪、久坐提醒、情绪check-in、燃尽预警",
+      "tools": ["shell", "file"],
+      "autostart": false
+    },
+    "guard-shrimp": {
+      "workspace": "workspace-guard",
+      "model": "claude-sonnet-4-6",
+      "description": "安全虾 GuardShrimp — Skill安全扫描、代码依赖漏洞检查、权限审计、行为监控",
+      "tools": ["shell", "file", "browser"],
+      "autostart": false
+    }
+  },
+
+  "cron": [
+    {
+      "schedule": "0 8 * * *",
+      "timezone": "Asia/Shanghai",
+      "agent": "ops-shrimp",
+      "action": "每日运营简报：汇总昨日各平台数据（阅读/粉丝/互动），生成今日选题建议，推送到 Telegram",
+      "announce": { "to": "war_room" }
+    },
+    {
+      "schedule": "0 */2 * * *",
+      "timezone": "Asia/Shanghai",
+      "agent": "care-shrimp",
+      "action": "工作状态检查：读取 ~/.shrimpilot/memory/health_log.json，计算连续工作时长。超过 2h 推送休息提醒，超过 4h 推送强制休息建议",
+      "announce": { "to": "war_room" }
+    },
+    {
+      "schedule": "0 22 * * *",
+      "timezone": "Asia/Shanghai",
+      "agent": "care-shrimp",
+      "action": "每日情绪 check-in：发送互动消息询问今天感受，记录到 health_log.json，基于历史数据给出个性化建议",
+      "announce": { "to": "war_room" }
+    },
+    {
+      "schedule": "0 3 * * *",
+      "timezone": "Asia/Shanghai",
+      "agent": "guard-shrimp",
+      "action": "夜间安全巡检：扫描最近 24h 安装的 npm/pip 包、新增 Skill、文件变更，检测异常模式，结果写入 security_log.json",
+      "announce": { "to": "war_room" }
+    }
+  ],
+
+  "channels": {
+    "telegram": {
+      "war_room": {
+        "bot_token_env": "TG_SHRIMPILOT_TOKEN",
+        "chat_id_env": "TG_SHRIMPILOT_CHAT_ID"
+      }
+    }
+  },
+
+  "commands": [
+    {
+      "source": "telegram",
+      "handler": "ops-shrimp",
+      "pattern": "^写|^生成|^发布|^content",
+      "description": "触发内容生成和发布"
+    },
+    {
+      "source": "telegram",
+      "handler": "guard-shrimp",
+      "pattern": "^扫描|^scan|^audit",
+      "description": "触发安全扫描"
+    },
+    {
+      "source": "telegram",
+      "handler": "care-shrimp",
+      "pattern": "^感觉|^mood|^休息|^break",
+      "description": "触发情绪对话或休息提醒"
+    },
+    {
+      "source": "telegram",
+      "handler": "care-shrimp",
+      "pattern": "^静音|^mute|^取消静音|^unmute|^提醒|^interval|^夜间静音|^关闭.*提醒|^开启.*提醒",
+      "description": "提醒配置：静音/取消静音/调频/夜间免打扰/按类型开关"
+    },
+    {
+      "source": "telegram",
+      "handler": "ops-shrimp",
+      "pattern": "^STATUS$",
+      "description": "查看守虾人全模块状态"
+    }
+  ],
+
+  "events": [
+    {
+      "name": "fatigue_detected",
+      "publisher": "care-shrimp",
+      "subscriber": "guard-shrimp",
+      "condition": "连续工作超过 6h 或昨晚睡眠 < 5h",
+      "action": "标记接下来的代码提交为「高风险待审」",
+      "auto": true
+    },
+    {
+      "name": "fatigue_code_risk",
+      "publisher": "guard-shrimp",
+      "subscriber": "ops-shrimp",
+      "condition": "代码被标记为高风险待审",
+      "action": "推迟下一次自动发布，直到代码审查通过",
+      "auto": true
+    },
+    {
+      "name": "security_threat",
+      "publisher": "guard-shrimp",
+      "subscriber": "care-shrimp",
+      "condition": "检测到安全事件（恶意 Skill、漏洞、异常行为）",
+      "action": "评估当前疲劳状态，如果疲劳则发出额外警告",
+      "auto": true
+    },
+    {
+      "name": "mood_low",
+      "publisher": "care-shrimp",
+      "subscriber": "ops-shrimp",
+      "condition": "连续 3 天情绪评分 < 3/5",
+      "action": "自动降低当日任务量，推送轻松内容选题",
+      "auto": true
+    }
+  ],
+
+  "shared_memory": {
+    "path": "~/.shrimpilot/memory/",
+    "files": {
+      "health_log": "health_log.json",
+      "ops_metrics": "ops_metrics.json",
+      "security_log": "security_log.json",
+      "user_profile": "user_profile.json",
+      "reminder_config": "reminder_config.json"
+    },
+    "description": "三模块共享记忆系统 — 联动决策的核心。每个模块读写自己的数据，读取其他模块的数据做联动判断"
+  },
+
+  "tools": {
+    "oz": {
+      "environment": "shrimpilot-tasks"
+    },
+    "supabase": {
+      "url_env": "SUPABASE_URL",
+      "key_env": "SUPABASE_KEY"
+    }
+  },
+
+  "security": {
+    "no_plaintext_keys": true,
+    "env_file": ".env",
+    "audit_on_startup": true,
+    "skill_scan_before_install": true
+  },
+
+  "skills_path": "skills/"
+}

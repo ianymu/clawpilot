@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>内容预览 - ShrimPilot</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { font-family: 'Inter', -apple-system, system-ui, sans-serif; }
+  body { background: #0f172a; color: #e2e8f0; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; }
+  .tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+  .tab.active { background: #334155; color: #f8fafc; }
+  .tab:not(.active) { color: #64748b; }
+  .preview-card { background: #0f172a; border: 1px solid #334155; border-radius: 12px; }
+</style>
+</head>
+<body class="min-h-screen px-4 py-6 max-w-[430px] mx-auto">
+
+<!-- Header -->
+<div class="flex items-center gap-3 mb-6">
+  <a href="./" class="text-slate-400 text-xl">&larr;</a>
+  <h1 class="text-xl font-bold">📝 内容预览</h1>
+</div>
+
+<!-- Tabs -->
+<div class="flex gap-2 mb-4">
+  <div class="tab active" data-tab="all">全部</div>
+  <div class="tab" data-tab="wechat">微信</div>
+  <div class="tab" data-tab="xhs">小红书</div>
+</div>
+
+<!-- Content List -->
+<div id="contentList" class="space-y-4 mb-6"></div>
+
+<!-- Empty State -->
+<div id="emptyState" class="card p-8 text-center hidden">
+  <div class="text-4xl mb-3">📝</div>
+  <div class="text-slate-400 mb-2">暂无内容草稿</div>
+  <div class="text-xs text-slate-500">
+    运营虾采集热点后会自动生成内容草稿<br>
+    生成后会出现在这里
+  </div>
+</div>
+
+<div class="text-center text-xs text-slate-500 mb-4">
+  内容由 AI Expand Generator 生成 &middot; 经 ContentQA 门控
+</div>
+
+<script>
+let allContent = [];
+
+function renderContent(filter) {
+  const items = filter === 'all' ? allContent : allContent.filter(c => c.platform === filter);
+  const el = document.getElementById('contentList');
+  const empty = document.getElementById('emptyState');
+
+  if (!items.length) {
+    el.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  el.innerHTML = items.map((c, i) => {
+    const platEmoji = c.platform === 'wechat' ? '💬' : c.platform === 'xhs' ? '📕' : '𝕏';
+    const platName = c.platform === 'wechat' ? '微信公众号' : c.platform === 'xhs' ? '小红书' : 'X';
+    const status = c.status === 'published' ? '✅ 已发布' : c.status === 'draft' ? '📋 草稿' : '⏳ 待发布';
+    const preview = (c.content || c.body || '').slice(0, 200);
+
+    return `
+      <div class="card overflow-hidden">
+        <div class="p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-slate-400">${platEmoji} ${platName}</span>
+            <span class="text-xs text-slate-500">${c.date || c.created_at || '--'}</span>
+          </div>
+          <h3 class="font-semibold text-sm mb-2">${c.title || '无标题'}</h3>
+          <p class="text-xs text-slate-400 line-clamp-4 leading-relaxed">${preview}${preview.length >= 200 ? '...' : ''}</p>
+        </div>
+        <div class="border-t border-slate-700 px-4 py-2 flex items-center justify-between">
+          <span class="text-xs">${status}</span>
+          ${c.topic ? `<span class="text-xs text-blue-400">#${c.topic}</span>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderContent(tab.dataset.tab);
+  });
+});
+
+async function load() {
+  allContent = await fetch('api/content').then(r => r.json()).catch(() => []);
+  renderContent('all');
+}
+
+load();
+</script>
+</body>
+</html>

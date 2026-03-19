@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShrimPilot Poster</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: linear-gradient(165deg, #0a0a0a 0%, #1a0a0a 30%, #0a1a1a 70%, #0a0a1a 100%);
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(255,100,50,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,100,50,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+  }
+
+  /* Glow effects */
+  .glow-1 {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,80,40,0.15) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    z-index: 0;
+  }
+  .glow-2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(40,180,255,0.1) 0%, transparent 70%);
+    bottom: 200px; left: -100px;
+    z-index: 0;
+  }
+  .glow-3 {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,180,40,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 80px 70px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .badge {
+    display: inline-block;
+    background: rgba(255,100,50,0.15);
+    border: 1px solid rgba(255,100,50,0.3);
+    color: #ff6432;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 100px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  /* Logo area */
+  .logo-area {
+    margin-bottom: 30px;
+  }
+  .shrimp-emoji {
+    font-size: 100px;
+    margin-bottom: 20px;
+    display: block;
+    filter: drop-shadow(0 0 30px rgba(255,100,50,0.4));
+  }
+  .title {
+    font-size: 90px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -3px;
+    background: linear-gradient(135deg, #ffffff 0%, #ff8c60 50%, #ff5020 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+  }
+  .subtitle {
+    font-size: 32px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 1px;
+  }
+
+  /* Tagline */
+  .tagline {
+    font-size: 42px;
+    font-weight: 600;
+    margin: 50px 0;
+    line-height: 1.4;
+    color: #ffffff;
+  }
+  .tagline .highlight {
+    color: #ff6432;
+  }
+
+  /* Three shrimp cards */
+  .shrimp-cards {
+    display: flex;
+    gap: 24px;
+    margin: 40px 0;
+  }
+  .shrimp-card {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 36px 28px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .shrimp-card:nth-child(1) { border-color: rgba(255,100,100,0.2); }
+  .shrimp-card:nth-child(2) { border-color: rgba(100,200,255,0.2); }
+  .shrimp-card:nth-child(3) { border-color: rgba(100,255,150,0.2); }
+
+  .card-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .card-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .card-name-en {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .card-desc {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    gap: 40px;
+    margin: 50px 0;
+    padding: 36px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat {
+    text-align: left;
+  }
+  .stat-number {
+    font-size: 48px;
+    font-weight: 900;
+    color: #ff6432;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 8px;
+  }
+
+  /* Tech badges */
+  .tech-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+  .tech-badge {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-left {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.6;
+  }
+  .footer-right {
+    text-align: right;
+  }
+  .hackathon-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6432, #ff3200);
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 14px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+  <div class="glow-3"></div>
+
+  <div class="content">
+    <div class="badge">OpenClaw Hackathon 2026</div>
+
+    <div class="logo-area">
+      <span class="shrimp-emoji">🦐</span>
+      <div class="title">ShrimPilot</div>
+      <div class="subtitle">AI Co-Founder Team for Solopreneurs</div>
+    </div>
+
+    <div class="tagline">
+      <span class="highlight">三只 AI 虾</span>，一个人的<br>创业军团
+    </div>
+
+    <div class="shrimp-cards">
+      <div class="shrimp-card">
+        <span class="card-icon">🦞</span>
+        <div class="card-name">健康虾</div>
+        <div class="card-name-en">CareShrimp</div>
+        <div class="card-desc">
+          Apple Watch 接入<br>
+          睡眠 · 心率 · HRV<br>
+          倦怠预警 · AI 识菜<br>
+          专业标准 (WHO/NIH)
+        </div>
+      </div>
+      <div class="shrimp-card">
+        <span class="card-icon">📊</span>
+        <div class="card-name">运营虾</div>
+        <div class="card-name-en">OpsShrimp</div>
+        <div class="card-desc">
+          四平台热点追踪<br>
+          YouTube 素材匹配<br>
+          一键内容生成<br>
+          AI 深度扩写
+        </div>
+      </div>
+      <div class="shrimp-card">
+        <span class="card-icon">🔬</span>
+        <div class="card-name">产研虾</div>
+        <div class="card-name-en">GuardShrimp</div>
+        <div class="card-desc">
+          安全审计 · 痛点追踪<br>
+          V7 Pipeline 联动<br>
+          9-Agent 协调<br>
+          LP 预览生成
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">9</div>
+        <div class="stat-label">AI Agents 协调</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">23K+</div>
+        <div class="stat-label">痛点数据</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">全天候运转</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">4</div>
+        <div class="stat-label">平台覆盖</div>
+      </div>
+    </div>
+
+    <div class="tech-row">
+      <span class="tech-badge">Claude Sonnet 4.6</span>
+      <span class="tech-badge">OpenClaw</span>
+      <span class="tech-badge">Apple Watch</span>
+      <span class="tech-badge">Supabase</span>
+      <span class="tech-badge">Telegram Bot</span>
+      <span class="tech-badge">Perplexity</span>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        Built by Ian Mu<br>
+        One person. Three shrimp. Full team.
+      </div>
+      <div class="footer-right">
+        <div class="hackathon-badge">🦐 DEMO READY</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

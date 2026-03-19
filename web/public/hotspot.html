@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>运营虾 - ShrimPilot</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { font-family: 'Inter', -apple-system, system-ui, sans-serif; }
+  body { background: #0f172a; color: #e2e8f0; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; }
+  .tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+  .tab.active { background: #334155; color: #f8fafc; }
+  .tab:not(.active) { color: #64748b; }
+  .score-bar { height: 6px; border-radius: 3px; background: #334155; }
+  .score-fill { height: 100%; border-radius: 3px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500; }
+  .badge-cross { background: rgba(249,115,22,0.15); color: #fb923c; }
+  .badge-consensus { background: rgba(239,68,68,0.15); color: #f87171; }
+  .badge-hot { background: rgba(234,179,8,0.15); color: #facc15; }
+  .topic-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; transition: all 0.2s; }
+  .topic-card:hover { border-color: #475569; }
+  .article-list { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+  .article-list.open { max-height: 500px; }
+  .plat-icon { font-size: 12px; }
+</style>
+</head>
+<body class="min-h-screen px-4 py-6 max-w-[430px] mx-auto">
+
+<!-- Header -->
+<div class="flex items-center gap-3 mb-6">
+  <a href="./" class="text-slate-400 text-xl">&larr;</a>
+  <h1 class="text-xl font-bold">📊 运营虾 · 热点</h1>
+  <span class="text-sm text-slate-400 ml-auto" id="dateStr"></span>
+</div>
+
+<!-- Summary -->
+<div class="card p-4 mb-4">
+  <div class="flex items-center justify-between mb-2">
+    <span class="text-sm text-slate-400">今日采集</span>
+    <span class="text-2xl font-bold text-blue-400" id="totalItems">--</span>
+  </div>
+  <div class="grid grid-cols-3 gap-2 text-center text-xs">
+    <div class="bg-green-500/10 rounded-lg py-2">
+      <div class="text-green-400 font-semibold" id="countWechat">0</div>
+      <div class="text-slate-400">微信</div>
+    </div>
+    <div class="bg-red-500/10 rounded-lg py-2">
+      <div class="text-red-400 font-semibold" id="countXhs">0</div>
+      <div class="text-slate-400">小红书</div>
+    </div>
+    <div class="bg-blue-500/10 rounded-lg py-2">
+      <div class="text-blue-400 font-semibold" id="countX">0</div>
+      <div class="text-slate-400">X</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="flex gap-2 mb-4 overflow-x-auto" id="tabBar">
+  <div class="tab active" data-tab="all">全部</div>
+  <div class="tab" data-tab="wechat">💬 微信</div>
+  <div class="tab" data-tab="xhs">📕 小红书</div>
+  <div class="tab" data-tab="x">𝕏</div>
+</div>
+
+<!-- Scoring Explanation -->
+<details class="card p-4 mb-4">
+  <summary class="text-sm font-semibold text-slate-400 cursor-pointer flex items-center gap-2">
+    <span>🔥 热度评分说明</span>
+    <span class="text-[10px] text-slate-500 ml-auto">点击展开</span>
+  </summary>
+  <div class="mt-3 text-xs text-slate-400 space-y-2 leading-relaxed">
+    <div class="flex items-start gap-2">
+      <span class="text-orange-400 font-bold w-16 flex-shrink-0">90-100</span>
+      <span>极热 — 多平台讨论爆发，情感强烈，时效性高</span>
+    </div>
+    <div class="flex items-start gap-2">
+      <span class="text-blue-400 font-bold w-16 flex-shrink-0">80-89</span>
+      <span>高热 — 跨平台传播，多博主关注</span>
+    </div>
+    <div class="flex items-start gap-2">
+      <span class="text-indigo-400 font-bold w-16 flex-shrink-0">70-79</span>
+      <span>中热 — 单平台热议或小范围跨平台</span>
+    </div>
+    <div class="flex items-start gap-2">
+      <span class="text-slate-500 font-bold w-16 flex-shrink-0">&lt;70</span>
+      <span>常规 — 日常话题，关注度一般</span>
+    </div>
+    <div class="border-t border-slate-700 pt-2 mt-2">
+      <p class="font-semibold text-slate-300 mb-1">评分维度：</p>
+      <ul class="list-disc list-inside space-y-0.5">
+        <li><b>讨论热度</b> — 文章/帖子数量与互动量</li>
+        <li><b>时效性</b> — 最近 24h 内发布权重更高</li>
+        <li><b>聚合度</b> — 同话题被多个博主/平台提及</li>
+        <li><b>情感强度</b> — 用词情绪越强烈分数越高</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<!-- Topic Cards -->
+<div id="topicCards" class="space-y-3 mb-4"></div>
+
+<!-- Trend Keywords -->
+<div class="card p-4 mb-4">
+  <h2 class="text-sm font-semibold text-slate-400 mb-3">📈 7 日趋势</h2>
+  <div style="height:160px;max-height:160px"><canvas id="trendChart"></canvas></div>
+  <div id="trendList" class="flex flex-wrap gap-2 mt-3"></div>
+</div>
+
+<!-- Full Text Summary -->
+<div class="card p-4 mb-6">
+  <h2 class="text-sm font-semibold text-slate-400 mb-3">📝 今日摘要</h2>
+  <div id="summaryText" class="text-sm text-slate-300 whitespace-pre-line leading-relaxed"></div>
+</div>
+
+<div class="text-center text-xs text-slate-500 mb-4">
+  数据来源: 微信 11 账号 · 小红书 10 账号 · X 13 账号
+</div>
+
+<script>
+document.getElementById('dateStr').textContent =
+  `${new Date().getMonth()+1}/${new Date().getDate()}`;
+
+let allTopics = [];
+
+const platIcon = (p) => p === 'wechat' ? '💬' : p === 'xhs' ? '📕' : '𝕏';
+const platName = (p) => p === 'wechat' ? '微信' : p === 'xhs' ? '小红书' : 'X';
+
+function renderTopics(filter) {
+  let list = allTopics;
+  if (filter !== 'all') {
+    list = allTopics.filter(t => t.platforms && t.platforms.includes(filter));
+  }
+
+  const el = document.getElementById('topicCards');
+  el.innerHTML = '';
+
+  if (!list.length) {
+    el.innerHTML = '<div class="card p-4 text-slate-500 text-sm text-center">暂无数据</div>';
+    return;
+  }
+
+  const maxScore = Math.max(...list.map(t => t.avg_score || 0));
+
+  list.forEach((t, i) => {
+    const score = t.avg_score || 0;
+    const pct = maxScore > 0 ? (score / maxScore * 100).toFixed(0) : 0;
+    const color = score >= 90 ? 'bg-orange-500' : score >= 80 ? 'bg-blue-500' : score >= 70 ? 'bg-indigo-500' : 'bg-slate-500';
+    const articles = t.articles || [];
+    const cardId = `topic-${i}`;
+
+    // Badges
+    let badges = '';
+    if (t.cross_platform_count >= 2) {
+      badges += `<span class="badge badge-cross">跨${t.cross_platform_count}平台</span> `;
+    }
+    if (t.blogger_count >= 3) {
+      badges += `<span class="badge badge-consensus">${t.blogger_count}博主共识</span> `;
+    }
+    if (score >= 90) {
+      badges += `<span class="badge badge-hot">极热</span> `;
+    }
+
+    // Platform icons row
+    let platIcons = (t.platforms || []).map(p => `<span class="plat-icon" title="${platName(p)}">${platIcon(p)}</span>`).join(' ');
+
+    // Article list
+    let articleHtml = '';
+    if (articles.length > 0) {
+      articleHtml = articles.map(a => {
+        const pi = platIcon(a.platform);
+        const src = a.source_name ? `<span class="text-blue-400">${a.source_name}</span>` : '';
+        const title = a.title || '无标题';
+        const kws = (a.keywords || []).map(k => `<span class="px-1.5 py-0.5 rounded bg-slate-700 text-slate-400">${k}</span>`).join(' ');
+        return `<div class="py-2 border-t border-slate-700/50">
+          <div class="flex items-start gap-2">
+            <span class="mt-0.5">${pi}</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm text-slate-200 leading-snug">${title}</div>
+              <div class="flex items-center gap-2 mt-1 text-xs">
+                ${src}
+                <span class="text-slate-500">🔥${a.score || 0}</span>
+              </div>
+              ${kws ? `<div class="flex flex-wrap gap-1 mt-1 text-[10px]">${kws}</div>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    const hasArticles = articles.length > 0;
+
+    el.innerHTML += `
+      <div class="topic-card p-4">
+        <div class="flex items-start justify-between mb-2 ${hasArticles ? 'cursor-pointer' : ''}" ${hasArticles ? `onclick="toggleArticles('${cardId}')"` : ''}>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs text-slate-500 font-mono">#${i + 1}</span>
+              <h3 class="text-sm font-semibold truncate">${t.topic || '未分类'}</h3>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              ${badges}
+              <span class="text-xs text-slate-500">${platIcons}</span>
+              <span class="text-xs text-slate-500">${t.article_count || articles.length}篇</span>
+            </div>
+          </div>
+          <div class="text-right ml-3 flex-shrink-0">
+            <div class="text-lg font-bold text-orange-400">🔥${score}</div>
+            <div class="text-[10px] text-slate-500">avg</div>
+          </div>
+        </div>
+        <div class="score-bar mt-2 mb-1"><div class="score-fill ${color}" style="width:${pct}%"></div></div>
+        ${hasArticles ? `
+          <div class="mt-2 text-xs text-slate-500 cursor-pointer flex items-center gap-1" onclick="toggleArticles('${cardId}')">
+            <span id="${cardId}-arrow">▶</span>
+            <span>展开 ${articles.length} 篇文章</span>
+          </div>
+          <div id="${cardId}" class="article-list mt-1">${articleHtml}</div>
+        ` : ''}
+      </div>`;
+  });
+}
+
+function toggleArticles(id) {
+  const el = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  if (!el) return;
+  el.classList.toggle('open');
+  if (arrow) arrow.textContent = el.classList.contains('open') ? '▼' : '▶';
+}
+
+// Tab switching
+document.getElementById('tabBar').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  renderTopics(tab.dataset.tab);
+});
+
+async function load() {
+  const data = await fetch('api/hotspot').then(r => r.json()).catch(() => ({}));
+
+  if (data.error) {
+    document.getElementById('topicCards').innerHTML = '<div class="card p-4 text-slate-500 text-center">暂无热点数据</div>';
+    return;
+  }
+
+  document.getElementById('totalItems').textContent = data.total_items || 0;
+  const bp = data.by_platform || {};
+  document.getElementById('countWechat').textContent = bp.wechat || 0;
+  document.getElementById('countXhs').textContent = bp.xhs || 0;
+  document.getElementById('countX').textContent = bp.x || 0;
+
+  // Handle both old format (flat list) and new format (enriched topics)
+  const raw = data.top_topics || [];
+  if (raw.length > 0 && raw[0].articles !== undefined) {
+    // New enriched format
+    allTopics = raw;
+  } else {
+    // Old flat format — group by topic for backward compat
+    const grouped = {};
+    raw.forEach(t => {
+      const key = t.topic || '未分类';
+      if (!grouped[key]) {
+        grouped[key] = { topic: key, platforms: [], articles: [], scores: [] };
+      }
+      if (t.platform && !grouped[key].platforms.includes(t.platform)) {
+        grouped[key].platforms.push(t.platform);
+      }
+      grouped[key].scores.push(t.score || t.avg_score || 0);
+    });
+    allTopics = Object.values(grouped).map(g => ({
+      topic: g.topic,
+      avg_score: Math.round(g.scores.reduce((a, b) => a + b, 0) / g.scores.length),
+      max_score: Math.max(...g.scores),
+      platforms: g.platforms,
+      cross_platform_count: g.platforms.length,
+      blogger_count: 0,
+      articles: [],
+      article_count: g.scores.length,
+    }));
+    allTopics.sort((a, b) => b.avg_score - a.avg_score);
+  }
+
+  renderTopics('all');
+
+  // Trends — Chart.js line chart + badges
+  const tc = data.trend_chart || {};
+  const trends = tc.trends || data.trends || [];
+  const daily = tc.daily_breakdown || [];
+  const trendEl = document.getElementById('trendList');
+  const chartCanvas = document.getElementById('trendChart');
+
+  const dirColors = {
+    rising: { line: '#22c55e', bg: 'bg-green-500/20 text-green-400', icon: '📈' },
+    breakout: { line: '#f97316', bg: 'bg-orange-500/20 text-orange-400', icon: '🚀' },
+    falling: { line: '#ef4444', bg: 'bg-red-500/20 text-red-400', icon: '📉' },
+    stable: { line: '#64748b', bg: 'bg-slate-500/20 text-slate-400', icon: '➡️' }
+  };
+
+  // Render Chart.js if we have trends with data_points or daily_breakdown
+  const hasDataPoints = trends.length > 0 && trends[0].data_points && trends[0].data_points.length >= 2;
+  const hasDaily = daily.length >= 2 && trends.length > 0;
+  if (hasDataPoints || hasDaily) {
+    // Use data_points from trends as primary source, fallback to daily_breakdown
+    const labels = hasDataPoints
+      ? trends[0].data_points.map(dp => (dp.date || '').slice(5))
+      : daily.map(d => (d.date || '').slice(5));
+    const top5 = trends.slice(0, 5);
+    const lineColors = ['#22c55e', '#3b82f6', '#f97316', '#ef4444', '#a855f7'];
+    const datasets = top5.map((t, idx) => {
+      const color = lineColors[idx % lineColors.length];
+      // Primary: read from trends[].data_points[]
+      let dataPoints;
+      if (t.data_points && t.data_points.length > 0) {
+        dataPoints = t.data_points.map(dp => dp.count || 0);
+      } else {
+        // Fallback: read from daily_breakdown[].topics[name].count
+        dataPoints = daily.map(d => {
+          if (d.topics && d.topics[t.topic]) return d.topics[t.topic].count || 0;
+          return 0;
+        });
+      }
+      return {
+        label: t.topic.length > 10 ? t.topic.slice(0, 10) + '…' : t.topic,
+        data: dataPoints,
+        borderColor: color,
+        backgroundColor: color + '33',
+        tension: 0.3,
+        pointRadius: 3,
+        borderWidth: 2,
+        fill: false
+      };
+    });
+
+    new Chart(chartCanvas, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 }, boxWidth: 12 } }
+        },
+        scales: {
+          x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: '#1e293b' } },
+          y: { title: { display: true, text: '提及数', color: '#64748b', font: { size: 10 } },
+               ticks: { color: '#64748b', font: { size: 10 }, stepSize: 1 }, grid: { color: '#1e293b' }, beginAtZero: true }
+        }
+      }
+    });
+  } else {
+    chartCanvas.style.display = 'none';
+  }
+
+  // Always render trend badges
+  if (trends.length) {
+    trends.forEach(t => {
+      const dir = t.trend_direction || t.type || 'stable';
+      const c = dirColors[dir] || dirColors.stable;
+      trendEl.innerHTML += `<span class="px-3 py-1 rounded-full text-xs ${c.bg}">${c.icon} ${t.topic}</span>`;
+    });
+  } else {
+    trendEl.innerHTML = '<span class="text-slate-500 text-xs">需要多天数据才能分析趋势</span>';
+  }
+
+  // Summary text
+  const summary = data.summary_text || '';
+  document.getElementById('summaryText').textContent = summary.replace(/\*/g, '').replace(/_/g, '');
+}
+
+load();
+</script>
+</body>
+</html>

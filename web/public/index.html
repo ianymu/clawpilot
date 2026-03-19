@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ShrimPilot - 控制台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { font-family: 'Inter', -apple-system, system-ui, sans-serif; }
+  body { background: #0f172a; color: #e2e8f0; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; }
+  .card:hover { border-color: #475569; }
+  .shrimp-glow { text-shadow: 0 0 20px rgba(251,146,60,0.3); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .status-online { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+  .status-offline { background: #ef4444; }
+</style>
+</head>
+<body class="min-h-screen px-4 py-6 max-w-[430px] mx-auto">
+
+<!-- Header -->
+<div class="text-center mb-8">
+  <h1 class="text-2xl font-bold shrimp-glow">ShrimPilot</h1>
+  <p class="text-slate-400 text-sm mt-1" id="dateStr"></p>
+</div>
+
+<!-- Agent Status Cards -->
+<div class="space-y-3 mb-6">
+  <!-- CareShrimp -->
+  <a href="health" class="card p-4 flex items-center justify-between block">
+    <div class="flex items-center gap-3">
+      <span class="text-3xl">💚</span>
+      <div>
+        <div class="font-semibold flex items-center gap-2">
+          健康虾
+          <span class="status-dot status-online"></span>
+        </div>
+        <div class="text-sm text-slate-400" id="healthSummary">加载中...</div>
+      </div>
+    </div>
+    <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+  <!-- OpsShrimp -->
+  <a href="hotspot" class="card p-4 flex items-center justify-between block">
+    <div class="flex items-center gap-3">
+      <span class="text-3xl">📊</span>
+      <div>
+        <div class="font-semibold flex items-center gap-2">
+          运营虾
+          <span class="status-dot status-online"></span>
+        </div>
+        <div class="text-sm text-slate-400" id="hotspotSummary">加载中...</div>
+      </div>
+    </div>
+    <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+  <!-- ResearchShrimp -->
+  <a href="research" class="card p-4 flex items-center justify-between block">
+    <div class="flex items-center gap-3">
+      <span class="text-3xl">🎯</span>
+      <div>
+        <div class="font-semibold flex items-center gap-2">
+          产研虾
+          <span class="status-dot status-online"></span>
+        </div>
+        <div class="text-sm text-slate-400" id="researchSummary">加载中...</div>
+      </div>
+    </div>
+    <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+  </a>
+
+  <!-- Content -->
+  <a href="content" class="card p-4 flex items-center justify-between block">
+    <div class="flex items-center gap-3">
+      <span class="text-3xl">📝</span>
+      <div>
+        <div class="font-semibold flex items-center gap-2">
+          内容预览
+          <span class="status-dot status-online"></span>
+        </div>
+        <div class="text-sm text-slate-400" id="contentSummary">WeChat / XHS 草稿</div>
+      </div>
+    </div>
+    <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+  </a>
+</div>
+
+<!-- Quick Stats -->
+<div class="grid grid-cols-3 gap-3 mb-6">
+  <div class="card p-3 text-center">
+    <div class="text-2xl font-bold text-orange-400" id="statSleep">--</div>
+    <div class="text-xs text-slate-400">睡眠</div>
+  </div>
+  <div class="card p-3 text-center">
+    <div class="text-2xl font-bold text-blue-400" id="statHotspots">--</div>
+    <div class="text-xs text-slate-400">今日热点</div>
+  </div>
+  <div class="card p-3 text-center">
+    <div class="text-2xl font-bold text-green-400" id="statDirections">--</div>
+    <div class="text-xs text-slate-400">产研方向</div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="text-center text-xs text-slate-500 mt-8">
+  ShrimPilot v3 &middot; Ian's One-Person Company OS
+</div>
+
+<script>
+const today = new Date();
+document.getElementById('dateStr').textContent =
+  `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日 ${'日一二三四五六'[today.getDay()]}`;
+
+async function load() {
+  try {
+    const [health, hotspot, research] = await Promise.all([
+      fetch('api/health').then(r => r.json()).catch(() => null),
+      fetch('api/hotspot').then(r => r.json()).catch(() => null),
+      fetch('api/research').then(r => r.json()).catch(() => null),
+    ]);
+
+    if (health?.today) {
+      const t = health.today;
+      const sleep = t.sleep_data?.total_hours || t.sleep_hours_estimated;
+      document.getElementById('healthSummary').textContent =
+        `睡眠 ${sleep || '--'}h | HR ${t.resting_hr_bpm || '--'} | HRV ${t.hrv_latest_ms || '--'}ms`;
+      document.getElementById('statSleep').textContent = sleep ? `${sleep}h` : '--';
+    }
+
+    if (hotspot && !hotspot.error) {
+      const total = hotspot.total_items || 0;
+      const bp = hotspot.by_platform || {};
+      document.getElementById('hotspotSummary').textContent =
+        `今日 ${total} 条 (微信${bp.wechat||0} 小红书${bp.xhs||0} X${bp.x||0})`;
+      document.getElementById('statHotspots').textContent = total;
+    }
+
+    if (Array.isArray(research) && research.length > 0) {
+      const goCount = research.filter(d => d.go_or_kill_recommendation?.toUpperCase().includes('GO')).length;
+      document.getElementById('researchSummary').textContent =
+        `${research.length} 个方向，${goCount} 个 GO 候选`;
+      document.getElementById('statDirections').textContent = research.length;
+    }
+  } catch(e) {
+    console.error('Load error:', e);
+  }
+}
+load();
+</script>
+</body>
+</html>
