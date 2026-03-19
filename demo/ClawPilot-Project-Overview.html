@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClawPilot — AI Co-Founder Team for Solopreneurs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
+  :root {
+    --orange: #ff6432;
+    --orange-light: #fff3ee;
+    --dark: #1a1a2e;
+    --gray: #6b7280;
+    --light-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --blue: #3b82f6;
+    --green: #10b981;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: A4;
+    margin: 15mm 18mm;
+  }
+
+  body {
+    font-family: "Inter", "SF Pro Display", -apple-system, sans-serif;
+    color: #1f2937;
+    line-height: 1.55;
+    font-size: 12.5px;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 40px;
+    background: white;
+  }
+
+  @media print {
+    body { padding: 0; }
+    .page-break { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+  }
+
+  /* Cover */
+  .cover {
+    text-align: center;
+    padding: 40px 0 60px;
+    border-bottom: 3px solid var(--orange);
+    margin-bottom: 20px;
+  }
+  .cover-emoji { font-size: 48px; margin-bottom: 20px; }
+  .cover h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--dark);
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .cover .subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    color: var(--gray);
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .cover .tagline {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .cover-meta {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 2;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark);
+    margin: 24px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .num {
+    background: var(--orange);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 16px 0 8px;
+  }
+
+  p { margin-bottom: 8px; }
+
+  .arch-diagram {
+    background: var(--dark);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    color: white;
+    font-family: 'Inter', monospace;
+  }
+  .arch-layer {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .arch-layer-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+  }
+  .arch-agents {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .arch-agent {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .arch-agent.care { border-color: rgba(255,100,100,0.4); }
+  .arch-agent.ops { border-color: rgba(100,180,255,0.4); }
+  .arch-agent.guard { border-color: rgba(100,255,150,0.4); }
+  .arch-agent-icon { font-size: 22px; margin-bottom: 2px; }
+  .arch-agent-name { font-size: 13px; font-weight: 600; }
+  .arch-agent-sub { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .arch-arrow {
+    text-align: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 16px;
+    margin: 4px 0;
+  }
+  .arch-data {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .arch-data-item {
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .card {
+    background: var(--light-bg);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid #e5e7eb;
+  }
+  .card-icon { font-size: 32px; margin-bottom: 8px; }
+  .card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--dark);
+  }
+  .card .card-sub {
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 10px;
+  }
+  .card ul {
+    list-style: none;
+    font-size: 13px;
+    color: #374151;
+  }
+  .card ul li { padding: 3px 0; }
+  .card ul li::before {
+    content: "\2022";
+    color: var(--orange);
+    margin-right: 6px;
+    font-weight: bold;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 0;
+    margin: 24px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+  }
+  .stat-item {
+    flex: 1;
+    padding: 14px;
+    text-align: center;
+    border-right: 1px solid #e5e7eb;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: "Inter", sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  th {
+    background: var(--dark);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  tr:nth-child(even) { background: var(--light-bg); }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 10px;
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+    min-width: 80px;
+  }
+  .flow-step.active {
+    background: var(--orange);
+    color: white;
+  }
+  .flow-arrow {
+    color: var(--orange);
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .tg-mock {
+    background: #0e1621;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    max-width: 400px;
+  }
+  .tg-msg {
+    background: #182533;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    color: #e4e6eb;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .tg-msg strong { color: #ffffff; }
+  .tg-msg .tg-link { color: #6ab2f2; text-decoration: none; }
+  .tg-msg .tg-warn { color: #e8a838; }
+  .tg-msg .tg-good { color: #5cc66a; }
+  .tg-msg .tg-bad { color: #e25656; }
+  .tg-time {
+    text-align: right;
+    font-size: 11px;
+    color: #5b6f82;
+    margin-top: 4px;
+  }
+
+  .highlight-box {
+    background: var(--orange-light);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 12.5px;
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .tech-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .tech-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 20px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 12px;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+  .timeline-time {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .timeline-who {
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 2px;
+  }
+  .timeline-text {
+    font-size: 13px;
+    color: #374151;
+  }
+
+  .bonus-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6432, #ff8f6b);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(255,100,50,0.3);
+  }
+
+  .watch-flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .watch-flow-step {
+    background: var(--light-bg);
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .watch-flow-step.highlight {
+    background: var(--orange-light);
+    border-color: var(--orange);
+  }
+  .watch-flow-arrow { color: var(--gray); font-size: 16px; }
+
+  .comp-table td:first-child { font-weight: 700; white-space: nowrap; }
+  .comp-table td:last-child { background: #f0fdf4; font-weight: 600; }
+  .comp-table th:last-child { background: var(--orange); }
+
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .roadmap-item {
+    background: var(--light-bg);
+    border-radius: 12px;
+    padding: 20px 16px;
+    border-top: 4px solid var(--orange);
+    text-align: center;
+  }
+  .roadmap-item.current { border-top-color: var(--green); background: #f0fdf4; }
+  .roadmap-quarter {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .roadmap-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+  .roadmap-detail {
+    font-size: 11px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px 0 20px;
+    border-top: 2px solid var(--orange);
+    margin-top: 20px;
+    color: var(--gray);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== Page 1: Cover ====== -->
+<div class="cover">
+  <div class="cover-badge">OpenClaw Hackathon 2026</div>
+  <div class="cover-emoji">🦞</div>
+  <h1>ClawPilot</h1>
+  <div class="subtitle">AI Co-Founder Team for Solopreneurs</div>
+  <div class="tagline">Three AI Lobsters. One Founder. A Full Team.</div>
+  <div class="cover-meta">
+    Project Overview v2.0<br>
+    March 19, 2026<br>
+    Ian Mu
+  </div>
+</div>
+
+<!-- ====== Page 2: Pain Points ====== -->
+<div class="page-break"></div>
+<h2><span class="num">1</span> Why ClawPilot?</h2>
+
+<h3>The Solopreneur Economy is Exploding</h3>
+<p>AI tools now enable one person to do the work of 5-10. But solopreneurs face three critical pain points:</p>
+
+<div style="display:flex; gap:16px; margin:20px 0;">
+  <div style="flex:1; background:#fee2e2; border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:36px; font-weight:900; color:#dc2626;">72%</div>
+    <div style="font-size:13px; color:#374151; margin-top:4px;">Report burnout</div>
+    <div style="font-size:11px; color:#6b7280;">Avg. 11.2h/day</div>
+    <div style="font-size:11px; color:#9ca3af;">— Indie Hackers 2024</div>
+  </div>
+  <div style="flex:1; background:#fef3c7; border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:36px; font-weight:900; color:#d97706;">3.5h</div>
+    <div style="font-size:13px; color:#374151; margin-top:4px;">Wasted daily on repetitive ops</div>
+    <div style="font-size:11px; color:#6b7280;">Content distribution + data tracking</div>
+    <div style="font-size:11px; color:#9ca3af;">— Buffer 2024</div>
+  </div>
+  <div style="flex:1; background:#ede9fe; border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:36px; font-weight:900; color:#7c3aed;">65%</div>
+    <div style="font-size:13px; color:#374151; margin-top:4px;">Pick the wrong market in year one</div>
+    <div style="font-size:11px; color:#6b7280;">Leading to startup failure</div>
+    <div style="font-size:11px; color:#9ca3af;">— CB Insights 2024</div>
+  </div>
+</div>
+
+<div class="highlight-box">
+  <strong>ClawPilot's answer:</strong> If one person isn't enough, give them an AI co-founder team.<br>
+  3 AI Lobster Agents, running 24/7, covering health, operations, and product research.
+</div>
+
+<!-- ====== Page 3: Solution ====== -->
+<div class="page-break"></div>
+<h2><span class="num">2</span> What Does ClawPilot Do?</h2>
+
+<h3>Three Lobsters, Three Roles</h3>
+<div class="card-grid">
+  <div class="card" style="border-top: 3px solid #ef4444;">
+    <div class="card-icon">🦞</div>
+    <h4>CareClaw</h4>
+    <div class="card-sub">Health Guardian</div>
+    <ul>
+      <li>Apple Watch real-time data</li>
+      <li>Sleep / HR / HRV analysis</li>
+      <li>7-signal burnout detection</li>
+      <li>AI food photo recognition</li>
+      <li>Personalized diet advice</li>
+      <li>WHO/NIH/AASM standards</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top: 3px solid #3b82f6;">
+    <div class="card-icon">📊</div>
+    <h4>OpsClaw</h4>
+    <div class="card-sub">Operations Autopilot</div>
+    <ul>
+      <li>4-platform hotspot tracking</li>
+      <li>AI multi-dimensional scoring</li>
+      <li>500+ YouTube asset matching</li>
+      <li>One-click 3-platform content</li>
+      <li>AI deep-write articles</li>
+      <li>7-day trend analysis</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top: 3px solid #10b981;">
+    <div class="card-icon">🔬</div>
+    <h4>GuardClaw</h4>
+    <div class="card-sub">Security + Research</div>
+    <ul>
+      <li>Nightly security audits</li>
+      <li>23,000+ pain point tracking</li>
+      <li>Top 5 trend analysis</li>
+      <li>V7 Pipeline integration</li>
+      <li>One-click Landing Page</li>
+      <li>9-Agent orchestration</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ====== Page 4: Day in the Life ====== -->
+<h3>A Day in the Life</h3>
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="timeline-dot"></div>
+    <div class="timeline-time">07:00</div>
+    <div class="timeline-who">🦞 CareClaw</div>
+    <div class="timeline-text">3 Telegram messages: Sleep analysis → Professional advice (AASM/NIH) → Diet plan</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#3b82f6;"></div>
+    <div class="timeline-time">07:30</div>
+    <div class="timeline-who">📊 OpsClaw</div>
+    <div class="timeline-text">4-platform hotspot briefing + YouTube match + reply Y for one-click article</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#10b981;"></div>
+    <div class="timeline-time">10:00</div>
+    <div class="timeline-who">🔬 GuardClaw</div>
+    <div class="timeline-text">Security audit report + Pain point Top 5 trend + New direction recommendations</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot"></div>
+    <div class="timeline-time">12:00</div>
+    <div class="timeline-who">🦞 CareClaw</div>
+    <div class="timeline-text">User photos lunch → AI food recognition → Calorie analysis → Dinner advice</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#3b82f6;"></div>
+    <div class="timeline-time">14:00</div>
+    <div class="timeline-who">📊 OpsClaw</div>
+    <div class="timeline-text">Match hotspots → Generate WeChat / XHS / X content across 3 platforms</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot"></div>
+    <div class="timeline-time">22:00</div>
+    <div class="timeline-who">🦞 CareClaw</div>
+    <div class="timeline-text">Mood check-in + Work duration alert</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot" style="background:#10b981;"></div>
+    <div class="timeline-time">03:00</div>
+    <div class="timeline-who">🔬 GuardClaw</div>
+    <div class="timeline-text">Automated security scan (code + infrastructure)</div>
+  </div>
+</div>
+
+<!-- ====== Page 5: Architecture ====== -->
+<div class="page-break"></div>
+<h2><span class="num">3</span> How It Works — Architecture</h2>
+
+<h3>Three-Layer Architecture</h3>
+<div class="arch-diagram">
+  <div class="arch-layer">
+    <div class="arch-layer-title">User Layer — Telegram Bot Unified Entry</div>
+    <div class="arch-agents">
+      <div class="arch-agent">
+        <div class="arch-agent-icon">💬</div>
+        <div class="arch-agent-name">Telegram Bot</div>
+        <div class="arch-agent-sub">@clawpilot_bot</div>
+      </div>
+      <div class="arch-agent">
+        <div class="arch-agent-icon">⌚</div>
+        <div class="arch-agent-name">Apple Watch</div>
+        <div class="arch-agent-sub">Health Auto Export</div>
+      </div>
+      <div class="arch-agent">
+        <div class="arch-agent-icon">🌐</div>
+        <div class="arch-agent-name">Web Dashboard</div>
+        <div class="arch-agent-sub">health / hotspot / research</div>
+      </div>
+    </div>
+  </div>
+  <div class="arch-arrow">▼ ▼ ▼</div>
+  <div class="arch-layer">
+    <div class="arch-layer-title">Orchestration — EC2 + OpenClaw Gateway + unified_tg_router</div>
+    <div class="arch-agents">
+      <div class="arch-agent care">
+        <div class="arch-agent-icon">🦞</div>
+        <div class="arch-agent-name">CareClaw</div>
+        <div class="arch-agent-sub">Claude Sonnet 4.6</div>
+      </div>
+      <div class="arch-agent ops">
+        <div class="arch-agent-icon">📊</div>
+        <div class="arch-agent-name">OpsClaw</div>
+        <div class="arch-agent-sub">Claude Sonnet 4.6</div>
+      </div>
+      <div class="arch-agent guard">
+        <div class="arch-agent-icon">🔬</div>
+        <div class="arch-agent-name">GuardClaw</div>
+        <div class="arch-agent-sub">Claude Sonnet 4.6</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:12px; font-size:12px; color:rgba(255,255,255,0.4);">
+      Shared Memory: ~/.clawpilot/memory/*.json &nbsp;|&nbsp; Event-Driven Coordination
+    </div>
+  </div>
+  <div class="arch-arrow">▼ ▼ ▼</div>
+  <div class="arch-layer">
+    <div class="arch-layer-title">Data Layer — Supabase + File Storage</div>
+    <div class="arch-data">
+      <div class="arch-data-item">🗄 pain_points (23,234)</div>
+      <div class="arch-data-item">📊 content_hotspots</div>
+      <div class="arch-data-item">❤️ health_log.json</div>
+      <div class="arch-data-item">📋 health_standards.json</div>
+      <div class="arch-data-item">🎬 YouTube 500+ assets</div>
+    </div>
+  </div>
+</div>
+
+<h3>Tech Stack</h3>
+<div class="tech-grid">
+  <div class="tech-item">
+    <div class="tech-icon" style="background:#ede9fe;">🤖</div>
+    <div><strong>Claude Sonnet 4.6</strong><br><span style="font-size:11px; color:var(--gray);">AI Model (Vision)</span></div>
+  </div>
+  <div class="tech-item">
+    <div class="tech-icon" style="background:#fee2e2;">🦞</div>
+    <div><strong>OpenClaw</strong><br><span style="font-size:11px; color:var(--gray);">Agent Orchestration</span></div>
+  </div>
+  <div class="tech-item">
+    <div class="tech-icon" style="background:#dcfce7;">🗄</div>
+    <div><strong>Supabase</strong><br><span style="font-size:11px; color:var(--gray);">PostgreSQL + API</span></div>
+  </div>
+  <div class="tech-item">
+    <div class="tech-icon" style="background:#dbeafe;">⌚</div>
+    <div><strong>Apple Watch Ultra</strong><br><span style="font-size:11px; color:var(--gray);">Health Data Source</span></div>
+  </div>
+  <div class="tech-item">
+    <div class="tech-icon" style="background:#fef3c7;">💬</div>
+    <div><strong>Telegram Bot API</strong><br><span style="font-size:11px; color:var(--gray);">Messaging Channel</span></div>
+  </div>
+  <div class="tech-item">
+    <div class="tech-icon" style="background:#f3e8ff;">📊</div>
+    <div><strong>Chart.js</strong><br><span style="font-size:11px; color:var(--gray);">Data Visualization</span></div>
+  </div>
+</div>
+
+<!-- ====== Page 6: Technical Highlights ====== -->
+<h2><span class="num">4</span> Technical Highlights</h2>
+
+<h3>Highlight 1: Shared Memory Coordination</h3>
+<p>Unlike traditional multi-agent systems, ClawPilot's three lobsters coordinate through a <strong>shared memory directory</strong>:</p>
+
+<div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:20px; margin:16px 0;">
+  <div style="font-size:13px; line-height:1.8;">
+    <strong style="color:#166534;">Scenario: CareClaw detects burnout → OpsClaw auto-reduces notifications</strong><br><br>
+    <span style="color:#dc2626;">🦞 CareClaw writes</span> memory/health_log.json<br>
+    &nbsp;&nbsp;→ fatigue_level: "warning", burnout_signals: 4<br><br>
+    <span style="color:#2563eb;">📊 OpsClaw reads</span> memory/health_log.json<br>
+    &nbsp;&nbsp;→ Detects warning → Reduces hotspot push from 5 to 2<br><br>
+    <span style="color:#059669;">🔬 GuardClaw reads</span> memory/health_log.json<br>
+    &nbsp;&nbsp;→ Postpones non-urgent scans → Sends simplified report
+  </div>
+</div>
+<p>This isn't hardcoded if-else logic — each agent's SOUL.md contains coordination rules, and the AI autonomously decides how to respond.</p>
+
+<h3>Highlight 2: Real Apple Watch Data</h3>
+<div style="display:flex; gap:16px; margin:16px 0;">
+  <div style="flex:1; background:var(--light-bg); border-radius:12px; padding:16px;">
+    <div style="font-size:13px; font-weight:700; margin-bottom:8px;">Data Flow</div>
+    <div style="font-size:12px; color:#374151; line-height:1.8;">
+      Apple Watch Ultra<br>
+      → Health Auto Export App<br>
+      → EC2 Flask API (:3001)<br>
+      → health_log.json<br>
+      → Shared across 3 Lobsters
+    </div>
+  </div>
+  <div style="flex:2; background:var(--light-bg); border-radius:12px; padding:16px;">
+    <div style="font-size:13px; font-weight:700; margin-bottom:8px;">Latest Real Data (2026-03-18)</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px;">
+      <div>😴 Sleep: <strong>7.2h</strong> (Eff 86%)</div>
+      <div>💤 Deep: <strong>13.8%</strong> ⚠️</div>
+      <div>🧠 REM: <strong>20%</strong> ✅</div>
+      <div>⏱ Latency: <strong>12min</strong> ✅</div>
+      <div>💚 HR: <strong>72bpm</strong></div>
+      <div>📊 HRV: <strong>36ms</strong></div>
+    </div>
+    <div style="font-size:11px; color:var(--gray); margin-top:8px;">Last sync: 2026-03-18 08:47 UTC — source: apple_watch_ultra</div>
+  </div>
+</div>
+
+<h3>Highlight 3: 9-Agent Full Pipeline</h3>
+<p>ClawPilot connects to the V7 product discovery pipeline (6 agents), forming a 9-Agent end-to-end system:</p>
+
+<div class="flow">
+  <div class="flow-step active">🎯 Orchestrator</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">📡 DataCollector</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">🔬 PainAnalyzer</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">📊 MarketValidator</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">🔍 CompetitorAnalyzer</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">🏗 BusinessDesigner</div>
+</div>
+<div style="text-align:center; color:var(--orange); font-size:20px; margin:8px 0;">▼ Three Lobsters Take Over ▼</div>
+<div class="flow">
+  <div class="flow-step" style="border-color:#10b981;">🔬 GuardClaw<br><span style="font-size:10px;">Security</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step" style="border-color:#ef4444;">🦞 CareClaw<br><span style="font-size:10px;">Founder Status</span></div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step" style="border-color:#3b82f6;">📊 OpsClaw<br><span style="font-size:10px;">Content Prep</span></div>
+</div>
+
+<h3>Highlight 4: Professional Health Standards</h3>
+<table>
+  <tr><th>Standard</th><th>Content</th><th>Application</th></tr>
+  <tr><td><strong>AASM</strong></td><td>Deep sleep should be 15-25%</td><td>Sleep quality assessment</td></tr>
+  <tr><td><strong>NIH</strong></td><td>Normal HRV range 30-50ms</td><td>Stress/recovery evaluation</td></tr>
+  <tr><td><strong>WHO</strong></td><td>Adults need 2000ml water/day</td><td>Hydration reminders</td></tr>
+  <tr><td><strong>Mayo Clinic</strong></td><td>Magnesium improves deep sleep</td><td>Diet recommendations</td></tr>
+</table>
+
+<!-- ====== Page 7: Apple Watch Hardware Innovation (NEW) ====== -->
+<div class="page-break"></div>
+<h2><span class="num">5</span> Apple Watch Hardware Innovation</h2>
+
+<div class="bonus-badge">Bonus Category — Lobster Agent Meets Smart Wearable Hardware</div>
+
+<p>ClawPilot is one of the <strong>few hackathon projects that integrates AI Agents with real hardware devices</strong>. This is not a simulated demo — it's a live system driven by real Apple Watch Ultra health data.</p>
+
+<h3>Technical Pipeline</h3>
+<div class="watch-flow">
+  <div class="watch-flow-step">⌚ Apple Watch Ultra</div>
+  <div class="watch-flow-arrow">→</div>
+  <div class="watch-flow-step">📱 Health Auto Export</div>
+  <div class="watch-flow-arrow">→</div>
+  <div class="watch-flow-step highlight">🌐 HTTPS POST</div>
+  <div class="watch-flow-arrow">→</div>
+  <div class="watch-flow-step highlight">🖥 EC2 Flask API (:3001)</div>
+  <div class="watch-flow-arrow">→</div>
+  <div class="watch-flow-step">📄 health_log.json</div>
+  <div class="watch-flow-arrow">→</div>
+  <div class="watch-flow-step highlight">🦞 CareClaw Analysis + Cross-Agent Coordination</div>
+</div>
+
+<h3>Why Is This Innovative?</h3>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0;">
+  <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:16px;">
+    <div style="font-size:14px; font-weight:700; color:#166534; margin-bottom:6px;">Real Data, Not Simulated</div>
+    <div style="font-size:12px; color:#374151; line-height:1.6;">
+      Live Apple Watch Ultra collection. Last sync: 2026-03-18.<br>
+      Sleep, heart rate, HRV — all from real wearing data.
+    </div>
+  </div>
+  <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:16px;">
+    <div style="font-size:14px; font-weight:700; color:#1d4ed8; margin-bottom:6px;">AI Agent Autonomous Decisions</div>
+    <div style="font-size:12px; color:#374151; line-height:1.6;">
+      Not just data display. CareClaw <strong>autonomously decides</strong>:<br>
+      Burnout alert → Notify OpsClaw to reduce frequency → System-wide response.
+    </div>
+  </div>
+  <div style="background:#fef3c7; border:1px solid #fde68a; border-radius:12px; padding:16px;">
+    <div style="font-size:14px; font-weight:700; color:#92400e; margin-bottom:6px;">3 Agents Share Health Data</div>
+    <div style="font-size:12px; color:#374151; line-height:1.6;">
+      Health data isn't just for CareClaw — all three lobsters <strong>read it</strong>,<br>
+      enabling cross-role coordination (reduce ops, postpone scans).
+    </div>
+  </div>
+  <div style="background:#fdf2f8; border:1px solid #fbcfe8; border-radius:12px; padding:16px;">
+    <div style="font-size:14px; font-weight:700; color:#9d174d; margin-bottom:6px;">International Medical Standards</div>
+    <div style="font-size:12px; color:#374151; line-height:1.6;">
+      Integrates AASM / NIH / WHO / Mayo Clinic standards.<br>
+      AI analysis is evidence-based, not generic advice.
+    </div>
+  </div>
+</div>
+
+<h3>Health Data Fields</h3>
+<table>
+  <tr><th>Data Field</th><th>Source Device</th><th>AI Analysis Dimension</th></tr>
+  <tr><td>Total Sleep / Efficiency</td><td>Apple Watch Ultra</td><td>AASM standard assessment</td></tr>
+  <tr><td>Deep Sleep / REM Ratio</td><td>Apple Watch Ultra</td><td>Sleep quality grading</td></tr>
+  <tr><td>Sleep Latency</td><td>Apple Watch Ultra</td><td>Sleep onset difficulty</td></tr>
+  <tr><td>Resting Heart Rate</td><td>Apple Watch Ultra</td><td>Cardiovascular health</td></tr>
+  <tr><td>HRV (Heart Rate Variability)</td><td>Apple Watch Ultra</td><td>Stress/recovery state</td></tr>
+  <tr><td>Active Calories (kcal)</td><td>Apple Watch Ultra</td><td>Activity level assessment</td></tr>
+</table>
+
+<h3>Future Hardware Expansion</h3>
+<div style="display:flex; gap:16px; margin:16px 0;">
+  <div style="flex:1; background:var(--light-bg); border-radius:12px; padding:16px; border-left:4px solid var(--blue);">
+    <div style="font-size:14px; font-weight:700; margin-bottom:4px;">📱 iPhone Posture Detection</div>
+    <div style="font-size:12px; color:var(--gray);">Gyroscope + accelerometer → Sedentary alerts + posture correction</div>
+  </div>
+  <div style="flex:1; background:var(--light-bg); border-radius:12px; padding:16px; border-left:4px solid var(--purple);">
+    <div style="font-size:14px; font-weight:700; margin-bottom:4px;">🎧 AirPods Pro Ambient Noise</div>
+    <div style="font-size:12px; color:var(--gray);">Environmental noise monitoring → Work environment optimization</div>
+  </div>
+</div>
+
+<!-- ====== Page 8: Demo ====== -->
+<div class="page-break"></div>
+<h2><span class="num">6</span> Demo Showcase</h2>
+
+<h3>CareClaw Morning Report (3 Telegram Messages)</h3>
+<div style="display:flex; gap:16px;">
+  <div class="tg-mock" style="flex:1;">
+    <div style="font-size:11px; color:#5b6f82; margin-bottom:8px;">Message 1 — Sleep + Body</div>
+    <div class="tg-msg">
+      <strong>🦞 CareClaw Morning — Mar 19</strong><br><br>
+      😴 <strong>Sleep 7.2h (Efficiency 86%)</strong><br>
+      &nbsp;&nbsp;💤 Deep 1.0h (13.8%) <span class="tg-warn">⚠️</span><br>
+      &nbsp;&nbsp;🧠 REM 1.4h (20%) <span class="tg-good">✅</span><br>
+      &nbsp;&nbsp;⏱ Latency 12min <span class="tg-good">✅</span><br><br>
+      💚 Resting HR 72bpm | HRV 36ms (↑6ms)<br>
+      <span class="tg-good">✅ Status: Good</span><br><br>
+      🔗 <span class="tg-link">View Trends</span>
+      <div class="tg-time">07:00</div>
+    </div>
+  </div>
+  <div class="tg-mock" style="flex:1;">
+    <div style="font-size:11px; color:#5b6f82; margin-bottom:8px;">Message 2 — Professional Advice</div>
+    <div class="tg-msg">
+      <strong>📋 Today's Advice</strong><br><br>
+      • Deep sleep 13.8%, below <strong>AASM</strong> recommended 15-25%<br>
+      &nbsp;&nbsp;→ No screens 1h before bed<br><br>
+      • HRV 36ms, below <strong>NIH</strong> normal range<br>
+      &nbsp;&nbsp;→ 10min mindful breathing after lunch<br><br>
+      • Hydration target: 2000ml
+      <div class="tg-time">07:00</div>
+    </div>
+  </div>
+</div>
+
+<h3 style="margin-top:24px;">AI Food Recognition</h3>
+<div class="tg-mock" style="max-width:420px;">
+  <div style="font-size:11px; color:#5b6f82; margin-bottom:8px;">User sends lunch photo → AI analysis</div>
+  <div class="tg-msg">
+    <strong>🍽 Lunch Analysis Complete</strong><br><br>
+    📸 Identified 3 dishes:<br>
+    &nbsp;&nbsp;1. Tomato Scrambled Eggs — 180kcal | <span class="tg-good">🟢 Healthy</span><br>
+    &nbsp;&nbsp;2. Braised Pork — 350kcal | <span class="tg-bad">🔴 High Fat</span><br>
+    &nbsp;&nbsp;3. Rice — 230kcal | <span class="tg-warn">🟡 High Carb</span><br><br>
+    📊 Total: 760kcal | Protein 41g Carbs 72g Fat 36.5g<br>
+    <span class="tg-warn">⚠️ High fat at lunch — keep dinner light</span><br><br>
+    🌙 <strong>Dinner Suggestion</strong><br>
+    • Steamed fish + Garlic broccoli + Millet porridge<br><br>
+    <span class="tg-good">✅ Logged! 3-day streak 🎉</span>
+    <div class="tg-time">12:15</div>
+  </div>
+</div>
+
+<h3>Dashboard Stats</h3>
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">23,234</div>
+    <div class="stat-label">Pain Points</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">9</div>
+    <div class="stat-label">AI Agents</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">4</div>
+    <div class="stat-label">Platforms</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">24/7</div>
+    <div class="stat-label">Always On</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">12</div>
+    <div class="stat-label">Cron Jobs</div>
+  </div>
+</div>
+
+<!-- ====== Page 9: Competitive Analysis (NEW) ====== -->
+<h2><span class="num">7</span> Competitive Analysis — Why ClawPilot Is Different</h2>
+
+<p>No existing product combines <strong>health management + operations automation + product research</strong> in a single AI Agent system. Current alternatives are "tool patchwork":</p>
+
+<table class="comp-table">
+  <tr>
+    <th>Dimension</th>
+    <th>General AI (ChatGPT)</th>
+    <th>Standalone Tools</th>
+    <th>ClawPilot</th>
+  </tr>
+  <tr>
+    <td>Health Mgmt</td>
+    <td>❌ No hardware</td>
+    <td>Oura/Whoop (standalone)</td>
+    <td>✅ Apple Watch + AI analysis</td>
+  </tr>
+  <tr>
+    <td>Ops Automation</td>
+    <td>Manual prompting</td>
+    <td>Buffer + Notion (siloed)</td>
+    <td>✅ 4-platform auto-track + gen</td>
+  </tr>
+  <tr>
+    <td>Product Research</td>
+    <td>Manual prompting</td>
+    <td>No mature solution</td>
+    <td>✅ 23K pain point database</td>
+  </tr>
+  <tr>
+    <td>Agent Coordination</td>
+    <td>❌ Single conversation</td>
+    <td>❌ Tools don't talk</td>
+    <td>✅ Shared memory + events</td>
+  </tr>
+  <tr>
+    <td>Hardware Integration</td>
+    <td>❌ None</td>
+    <td>Standalone apps, no linking</td>
+    <td>✅ Apple Watch real-time data</td>
+  </tr>
+  <tr>
+    <td>24/7 Autonomous</td>
+    <td>❌ Needs human trigger</td>
+    <td>Partial (separate configs)</td>
+    <td>✅ 12 Cron Jobs always-on</td>
+  </tr>
+  <tr>
+    <td>Health↔Ops Linking</td>
+    <td>❌</td>
+    <td>❌ Completely siloed</td>
+    <td>✅ Burnout → auto-reduce ops</td>
+  </tr>
+</table>
+
+<div class="highlight-box" style="margin-top:20px;">
+  <strong>Core Differentiator:</strong> ClawPilot isn't another AI chat tool or a tool bundle. It's an <strong>autonomous agent team</strong> — when CareClaw detects fatigue, OpsClaw automatically reduces work notifications. This cross-role intelligent coordination is impossible with any tool combination.
+</div>
+
+<!-- ====== Page 10: Business Model ====== -->
+<div class="page-break"></div>
+<h2><span class="num">8</span> Business Model</h2>
+
+<h3>Target Users</h3>
+<p>Solopreneurs / Indie Hackers / Content Creators / Freelance Developers</p>
+
+<h3>Pricing</h3>
+<table>
+  <tr><th>Plan</th><th>Price</th><th>Includes</th></tr>
+  <tr><td><strong>Basic</strong></td><td>$19/mo</td><td>CareClaw (sleep analysis + burnout detection + diet advice)</td></tr>
+  <tr><td><strong>Pro</strong></td><td>$49/mo</td><td>+ OpsClaw (hotspot tracking + content generation + YouTube match)</td></tr>
+  <tr><td><strong>Enterprise</strong></td><td>$99/mo</td><td>+ GuardClaw + V7 Pipeline + Custom Agents</td></tr>
+</table>
+
+<h3>Market Size</h3>
+<div style="display:flex; gap:16px; margin:16px 0;">
+  <div style="flex:1; text-align:center; padding:20px; background:var(--light-bg); border-radius:12px;">
+    <div style="font-size:12px; color:var(--gray);">TAM</div>
+    <div style="font-family:'Inter',sans-serif; font-size:28px; font-weight:900; color:var(--dark);">$8.5B</div>
+    <div style="font-size:11px; color:var(--gray);">Global Solopreneur SaaS</div>
+  </div>
+  <div style="flex:1; text-align:center; padding:20px; background:var(--light-bg); border-radius:12px;">
+    <div style="font-size:12px; color:var(--gray);">SAM</div>
+    <div style="font-family:'Inter',sans-serif; font-size:28px; font-weight:900; color:var(--blue);">$1.2B</div>
+    <div style="font-size:11px; color:var(--gray);">AI-first Founder Tools</div>
+  </div>
+  <div style="flex:1; text-align:center; padding:20px; background:var(--light-bg); border-radius:12px;">
+    <div style="font-size:12px; color:var(--gray);">SOM (Y1)</div>
+    <div style="font-family:'Inter',sans-serif; font-size:28px; font-weight:900; color:var(--green);">$24M</div>
+    <div style="font-size:11px; color:var(--gray);">2,000 users × $99/mo</div>
+  </div>
+</div>
+
+<h3>Moat</h3>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
+  <div style="background:var(--light-bg); border-radius:10px; padding:16px;">
+    <div style="font-size:20px; margin-bottom:6px;">🔄</div>
+    <div style="font-size:14px; font-weight:700;">Data Flywheel</div>
+    <div style="font-size:12px; color:var(--gray);">More usage → Better recommendations → Higher retention</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:10px; padding:16px;">
+    <div style="font-size:20px; margin-bottom:6px;">🔗</div>
+    <div style="font-size:14px; font-weight:700;">Agent Network Effects</div>
+    <div style="font-size:12px; color:var(--gray);">3 coordinated agents > 3 standalone tools</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:10px; padding:16px;">
+    <div style="font-size:20px; margin-bottom:6px;">🏥</div>
+    <div style="font-size:14px; font-weight:700;">Professional Standards</div>
+    <div style="font-size:12px; color:var(--gray);">WHO/NIH/AASM integration not easily replicated</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:10px; padding:16px;">
+    <div style="font-size:20px; margin-bottom:6px;">♾️</div>
+    <div style="font-size:14px; font-weight:700;">Full-Loop Closure</div>
+    <div style="font-size:12px; color:var(--gray);">Discovery → Validation → Execution complete loop</div>
+  </div>
+</div>
+
+<!-- ====== Page 11: Team + Traction (NEW) ====== -->
+<h2><span class="num">9</span> Team & Traction</h2>
+
+<h3>Team</h3>
+<div style="display:flex; gap:20px; margin:16px 0; align-items:flex-start;">
+  <div style="flex:1; background:var(--light-bg); border-radius:12px; padding:24px; border-top:3px solid var(--orange);">
+    <div style="font-size:18px; font-weight:800; color:var(--dark); margin-bottom:4px;">Ian Mu</div>
+    <div style="font-size:13px; color:var(--gray); margin-bottom:12px;">Solopreneur / The only human member of ClawPilot</div>
+    <ul style="list-style:none; font-size:13px; color:#374151;">
+      <li style="padding:3px 0;">Full-stack dev + AI Agent architecture design</li>
+      <li style="padding:3px 0;">Built 9-Agent system from scratch, solo operations</li>
+      <li style="padding:3px 0;">First user and strictest tester of ClawPilot</li>
+    </ul>
+  </div>
+  <div style="flex:1; background:var(--light-bg); border-radius:12px; padding:24px; border-top:3px solid var(--blue);">
+    <div style="font-size:18px; font-weight:800; color:var(--dark); margin-bottom:4px;">3 AI Lobsters</div>
+    <div style="font-size:13px; color:var(--gray); margin-bottom:12px;">24/7 AI co-founder team</div>
+    <ul style="list-style:none; font-size:13px; color:#374151;">
+      <li style="padding:3px 0;">🦞 CareClaw — Health Guardian (Claude Sonnet 4.6)</li>
+      <li style="padding:3px 0;">📊 OpsClaw — Ops Autopilot (Claude Sonnet 4.6)</li>
+      <li style="padding:3px 0;">🔬 GuardClaw — Security & Research (Claude Sonnet 4.6)</li>
+    </ul>
+  </div>
+</div>
+
+<h3>Traction</h3>
+<div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin:16px 0;">
+  <div style="background:var(--light-bg); border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:32px; font-weight:900; color:var(--orange);">23,234</div>
+    <div style="font-size:13px; color:var(--gray); margin-top:4px;">Pain Points Collected</div>
+    <div style="font-size:11px; color:#9ca3af;">Reddit / HN / X / IH</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:32px; font-weight:900; color:var(--green);">7 Days</div>
+    <div style="font-size:13px; color:var(--gray); margin-top:4px;">Apple Watch Health Data</div>
+    <div style="font-size:11px; color:#9ca3af;">Real wearing, continuous sync</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:32px; font-weight:900; color:var(--blue);">9</div>
+    <div style="font-size:13px; color:var(--gray); margin-top:4px;">AI Agents Deployed</div>
+    <div style="font-size:11px; color:#9ca3af;">EC2 + OpenClaw 24/7</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:32px; font-weight:900; color:var(--purple);">12</div>
+    <div style="font-size:13px; color:var(--gray); margin-top:4px;">Cron Jobs</div>
+    <div style="font-size:11px; color:#9ca3af;">Fully automated scheduling</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:32px; font-weight:900; color:var(--red);">3</div>
+    <div style="font-size:13px; color:var(--gray); margin-top:4px;">Web Dashboards</div>
+    <div style="font-size:11px; color:#9ca3af;">Health / Hotspot / Research</div>
+  </div>
+  <div style="background:var(--light-bg); border-radius:12px; padding:20px; text-align:center;">
+    <div style="font-family:'Inter',sans-serif; font-size:32px; font-weight:900; color:#f59e0b;">500+</div>
+    <div style="font-size:13px; color:var(--gray); margin-top:4px;">YouTube Assets</div>
+    <div style="font-size:11px; color:#9ca3af;">Auto-matched to hotspots</div>
+  </div>
+</div>
+
+<div class="highlight-box">
+  <strong>Key Point:</strong> ClawPilot is not a concept demo. All agents are running 24/7 on EC2, and the founder has been the first real user for over 2 weeks.
+</div>
+
+<!-- ====== Page 12: Roadmap + CTA (NEW) ====== -->
+<div class="page-break"></div>
+<h2><span class="num">10</span> Roadmap</h2>
+
+<div class="roadmap-grid">
+  <div class="roadmap-item current">
+    <div class="roadmap-quarter">Q1 2026</div>
+    <div class="roadmap-title">Hackathon MVP</div>
+    <div class="roadmap-detail">
+      3 Agent core features<br>
+      Apple Watch integration<br>
+      Telegram Bot interface<br>
+      9-Agent full pipeline
+    </div>
+    <div style="margin-top:8px; font-size:11px; font-weight:700; color:var(--green);">✅ Complete</div>
+  </div>
+  <div class="roadmap-item">
+    <div class="roadmap-quarter">Q2 2026</div>
+    <div class="roadmap-title">Public Beta</div>
+    <div class="roadmap-detail">
+      100 beta users<br>
+      Multi-language support<br>
+      Agent personalization<br>
+      Data privacy compliance
+    </div>
+  </div>
+  <div class="roadmap-item">
+    <div class="roadmap-quarter">Q3 2026</div>
+    <div class="roadmap-title">Deep Hardware</div>
+    <div class="roadmap-detail">
+      Apple Watch deep API<br>
+      iPhone posture detection<br>
+      Standalone iOS App<br>
+      AirPods noise monitoring
+    </div>
+  </div>
+  <div class="roadmap-item">
+    <div class="roadmap-quarter">Q4 2026</div>
+    <div class="roadmap-title">Paid Launch</div>
+    <div class="roadmap-detail">
+      SaaS subscription<br>
+      Custom Agents<br>
+      Team plan<br>
+      Open API
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; margin:20px 0; padding:24px; background:linear-gradient(135deg, var(--orange-light), #fff); border-radius:16px; border:2px solid var(--orange);">
+  <div style="font-size:32px; margin-bottom:16px;">🦞</div>
+  <div style="font-size:20px; font-weight:900; color:var(--dark); margin-bottom:8px;">ClawPilot</div>
+  <div style="font-size:16px; color:var(--gray); margin-bottom:24px;">The power of a team, for a team of one.</div>
+  <div style="font-size:14px; color:var(--dark); line-height:2;">
+    <strong>Try it:</strong> Telegram @clawpilot_bot<br>
+    <strong>GitHub:</strong> github.com/ianymu/clawpilot<br>
+    <strong>Contact:</strong> Ian Mu
+  </div>
+</div>
+
+<!-- ====== Appendix ====== -->
+<h2><span class="num">+</span> Appendix: Technical Specifications</h2>
+<table>
+  <tr><th>Item</th><th>Specification</th></tr>
+  <tr><td>Infrastructure</td><td>AWS EC2 t3.large (Amazon Linux 2)</td></tr>
+  <tr><td>AI Model</td><td>Claude Sonnet 4.6 (Anthropic) — Vision support</td></tr>
+  <tr><td>Database</td><td>Supabase (PostgreSQL 15) + pgvector</td></tr>
+  <tr><td>Process Manager</td><td>pm2 (3 persistent: claw-router, claw-web, care-flask)</td></tr>
+  <tr><td>Cron Jobs</td><td>12 scheduled tasks (UTC timezone)</td></tr>
+  <tr><td>Data Scale</td><td>23,234 pain points · 7-day health history · 500+ YouTube assets</td></tr>
+  <tr><td>Data Sources</td><td>Apple Watch Ultra · Reddit · Hacker News · WeChat · XHS · X</td></tr>
+  <tr><td>Search Engines</td><td>Perplexity + Tavily + Brave</td></tr>
+  <tr><td>Hardware</td><td>Apple Watch Ultra (watchOS 11) + Health Auto Export App</td></tr>
+</table>
+
+<div class="footer">
+  <div style="font-size:28px; margin-bottom:12px;">🦞</div>
+  <strong>ClawPilot</strong> — The power of a team, for a team of one.<br>
+  Built by Ian Mu · OpenClaw Hackathon 2026
+</div>
+
+</body>
+</html>
