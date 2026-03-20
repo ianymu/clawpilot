@@ -108,10 +108,8 @@ clawpilot/
 ├── web/                   # Express.js dashboard
 │   ├── server.js
 │   └── public/            # Health, hotspot, research dashboards
-├── demo/                  # Hackathon assets
-│   ├── ClawPilot-Dark.excalidraw  # Architecture diagram
-│   └── images/
-└── docs/                  # Project documentation
+
+└── docs/                  # Project documentation (incl. PDF overview)
 ```
 
 ---

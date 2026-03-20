@@ -100,6 +100,10 @@ clawpilot/
 │   ├── morning_health_brief.py   # CareClaw 健康晨报
 │   ├── apple_health_sync.py      # Apple Watch 数据接收
 │   ├── hotspot_monitor.py        # OpsClaw 热点追踪
+│   ├── hotspot/                   # 热点采集子包
+│   │   ├── collectors/            # 微信/小红书/X 采集器
+│   │   ├── trend_analyzer.py      # 趋势分析
+│   │   └── summary.py            # 摘要生成
 │   ├── research_morning_brief.py # GuardClaw 产研日报
 │   ├── research_lp_gen.py        # 一键 LP 生成
 │   ├── demo_coordination.py      # 9-Agent 协调演示
@@ -108,10 +112,7 @@ clawpilot/
 ├── web/                   # Express.js 看板
 │   ├── server.js
 │   └── public/            # 健康/热点/产研看板
-├── demo/                  # 黑客松展示素材
-│   ├── ClawPilot-Dark.excalidraw  # 架构图
-│   └── images/
-└── docs/                  # 项目文档
+└── docs/                  # 项目文档（含 PDF 说明书）
 ```
 
 ---
